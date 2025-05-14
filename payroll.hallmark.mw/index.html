@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payroll MIS</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <!-- Themify Icons -->
+  <link rel="stylesheet" href="./themify/themify-icons.css">
+
+  <link rel="icon" type="image/x-icon" href="./includes/logo.png">
+
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center px-4 py-8">
+
+  <div class="w-full max-w-6xl bg-white rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
+    
+    <!-- Hero Section -->
+    <div class="p-8 md:p-10 bg-gradient-to-br from-blue-600 to-blue-800 text-white flex flex-col justify-center text-center md:text-left">
+      <h1 class="text-3xl md:text-4xl font-bold mb-4">Welcome to Our Payroll MIS</h1>
+      <p class="text-base md:text-lg mb-6">A modern payroll system that simplifies payroll processing for your organization.</p>
+    </div>
+
+    <!-- Login Form -->
+    <div class="p-8 md:p-10 flex items-center justify-center">
+      <form id="loginForm" class="w-full max-w-sm">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Login</h2>
+
+        <div class="mb-4">
+          <label class="block text-gray-600 mb-1" for="email">Email</label>
+          <div class="flex items-center border border-gray-300 rounded-md px-3 py-2 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500">
+            <i class="ti-email text-gray-400 mr-2"></i>
+            <input type="email" name="email" id="email" required class="w-full outline-none text-gray-700" placeholder="Enter your email" />
+          </div>
+        </div>
+
+        <div class="mb-6">
+          <label class="block text-gray-600 mb-1" for="password">Password</label>
+          <div class="flex items-center border border-gray-300 rounded-md px-3 py-2 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500">
+            <i class="ti-lock text-gray-400 mr-2"></i>
+            <input type="password" name="password" id="password" required class="w-full outline-none text-gray-700" placeholder="Enter your password" />
+          </div>
+        </div>
+
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-md transition duration-200 flex items-center justify-center">
+          <i class="ti-unlock mr-2"></i>Login
+        </button>
+
+        <p class="text-center text-sm text-gray-500 mt-4">© 2025 Payroll</p>
+      </form>
+    </div>
+
+  </div>
+
+<script>
+$(document).ready(function() {
+  $('#loginForm').submit(function(e) {
+    e.preventDefault();
+
+    const email = $('#email').val().trim();
+    const password = $('#password').val().trim();
+
+    if (!email || !password) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Required Fields',
+        text: 'Please fill in all fields',
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000
+      });
+      return;
+    }
+
+    // Show loading state
+    const submitBtn = $(this).find('button[type="submit"]');
+    const originalBtnText = submitBtn.html();
+    submitBtn.html('<i class="ti-reload mr-2"></i>Logging in...').prop('disabled', true);
+
+    $.ajax({
+      url: './login.php',
+      method: 'POST',
+      data: { email, password },
+      dataType: 'json'
+    })
+    .done(function(response) {
+      if (response.status === 'success') {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success!',
+          text: 'Login successful! Redirecting...',
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 2000
+        });
+        
+        setTimeout(() => {
+          window.location.href = response.redirect;
+        }, 1000);
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: response.message,
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000
+        });
+      }
+    })
+    .fail(function() {
+      Swal.fire({
+        icon: 'error',
+        title: 'Server Error',
+        text: 'Failed to connect to server. Please try again.',
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000
+      });
+    })
+    .always(function() {
+      submitBtn.html(originalBtnText).prop('disabled', false);
+    });
+  });
+});
+</script>
+
+</body>
+</html>

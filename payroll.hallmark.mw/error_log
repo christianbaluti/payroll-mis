@@ -1,0 +1,15 @@
+[20-Apr-2025 11:41:12 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'hallm3pc_payroll'@'localhost' (using password: YES) in /home4/hallm3pc/payroll.hallmark.mw/db2.php:8
+Stack trace:
+#0 /home4/hallm3pc/payroll.hallmark.mw/db2.php(8): mysqli->__construct('localhost', 'hallm3pc_payrol...', Object(SensitiveParameterValue), 'hallm3pc_payrol...')
+#1 {main}
+  thrown in /home4/hallm3pc/payroll.hallmark.mw/db2.php on line 8
+[20-Apr-2025 11:42:14 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'hallm3pc_payroll'@'localhost' (using password: YES) in /home4/hallm3pc/payroll.hallmark.mw/db2.php:8
+Stack trace:
+#0 /home4/hallm3pc/payroll.hallmark.mw/db2.php(8): mysqli->__construct('localhost', 'hallm3pc_payrol...', Object(SensitiveParameterValue), 'hallm3pc_payrol...')
+#1 {main}
+  thrown in /home4/hallm3pc/payroll.hallmark.mw/db2.php on line 8
+[20-Apr-2025 11:42:19 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'hallm3pc_payroll'@'localhost' (using password: YES) in /home4/hallm3pc/payroll.hallmark.mw/db2.php:8
+Stack trace:
+#0 /home4/hallm3pc/payroll.hallmark.mw/db2.php(8): mysqli->__construct('localhost', 'hallm3pc_payrol...', Object(SensitiveParameterValue), 'hallm3pc_payrol...')
+#1 {main}
+  thrown in /home4/hallm3pc/payroll.hallmark.mw/db2.php on line 8

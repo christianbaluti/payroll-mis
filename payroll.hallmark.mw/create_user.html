@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Create User - Payroll System</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Themify Icons -->
+  <link rel="stylesheet" href="./themify/themify-icons.css">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <!-- Notyf CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+<!-- Notyf JS -->
+<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gray-100 flex items-center justify-center px-4">
+
+  <!-- User Creation Form -->
+  <div class="max-w-3xl w-full bg-white shadow-xl rounded-2xl p-8">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+      <i class="ti-user mr-2 text-blue-600 text-3xl"></i> Create New User
+    </h2>
+
+    <form id="createUserForm" class="space-y-5">
+      <!-- Email -->
+      <div>
+        <label class="block text-gray-700 font-medium mb-1">Email</label>
+        <div class="flex items-center border border-gray-300 rounded-md px-3 py-2">
+          <i class="ti-email text-gray-400 mr-2"></i>
+          <input type="email" name="email" required class="w-full outline-none" placeholder="Enter user email" />
+        </div>
+      </div>
+
+      <!-- Role -->
+      <div>
+        <label class="block text-gray-700 font-medium mb-1">Role</label>
+        <div class="flex items-center border border-gray-300 rounded-md px-3 py-2">
+          <i class="ti-id-badge text-gray-400 mr-2"></i>
+          <select name="role" required class="w-full outline-none bg-transparent">
+            <option value="" disabled selected>Select Role</option>
+            <option value="admin">Admin</option>
+            <option value="hr">HR</option>
+            <option value="manager">Manager</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div>
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md">
+          <i class="ti-email mr-2"></i> Send Account Invitation
+        </button>
+      </div>
+    </form>
+  </div>
+
+
+
+  <!-- Toastify JS -->
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+  <!-- AJAX Script -->
+<script>
+      const notyf = new Notyf({
+        duration: 3000,
+        position: { x: 'right', y: 'top' }
+      });
+
+      document.getElementById("createUserForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const spinner = document.getElementById("loadingSpinner");
+
+        // Show loading spinner
+        spinner.classList.remove("hidden");
+
+        fetch("create_user_invite.php", {
+          method: "POST",
+          body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+          // Hide loading spinner
+          spinner.classList.add("hidden");
+
+          if (data.status === "success") {
+            notyf.success(data.message);
+            e.target.reset();
+          } else {
+            notyf.error(data.message);
+          }
+        })
+        .catch(error => {
+          // Hide loading spinner
+          spinner.classList.add("hidden");
+
+          notyf.error("Something went wrong. Try again.");
+          console.error("Fetch error:", error);
+        });
+      });
+
+
+</script>
+<!-- Loading Spinner -->
+<div id="loadingSpinner" class="fixed inset-0 bg-white bg-opacity-60 flex items-center justify-center z-50 hidden">
+  <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-opacity-75"></div>
+</div>
+</body>
+</html>

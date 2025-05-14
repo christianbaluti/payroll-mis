@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Payslip Generator Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      padding: 30px;
+    }
+    form {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0 20px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 10px 15px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .response {
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <form id="payslipForm">
+    <h2>Generate and Email Payslip</h2>
+
+    <label>Full Name</label>
+    <input type="text" name="name" value="John Banda" required>
+
+    <label>Email</label>
+    <input type="email" name="email" value="crisnickchristian@gmail.com" required>
+
+    <label>Department</label>
+    <input type="text" name="department" value="ICT Department" required>
+
+    <label>Gender</label>
+    <select name="gender" required>
+      <option value="">Select</option>
+      <option value="Male" selected>Male</option>
+      <option value="Female">Female</option>
+    </select>
+
+    <label>Gross Salary</label>
+    <input type="number" name="salary" value="750000" required>
+
+    <label>PAYE</label>
+    <input type="number" name="paye" value="112500" required>
+
+    <label>Net Salary</label>
+    <input type="number" name="netSalary" value="600000" required>
+
+    <label>Pension</label>
+    <input type="number" name="pension" value="37500" required>
+
+    <label>Additions</label>
+    <input type="number" name="additions" value="50000" required>
+
+    <label>Deductions</label>
+    <input type="number" name="deductions" value="25000" required>
+
+    <label>Welfare Fund</label>
+    <input type="number" name="welfareFund" value="5000" required>
+
+    <label>Bank Name</label>
+    <input type="text" name="bankName" value="National Bank of Malawi" required>
+
+    <label>Bank Account Name</label>
+    <input type="text" name="bankAccountName" value="John K. Banda" required>
+
+    <label>Bank Account Number</label>
+    <input type="text" name="bankAccountNumber" value="1234567890" required>
+
+    <label>Bank Branch</label>
+    <input type="text" name="bankBranch" value="Mzuzu Branch" required>
+
+    <button type="submit">Send Payslip</button>
+
+    <div class="response" id="response"></div>
+  </form>
+
+  <script>
+    document.getElementById('payslipForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const form = e.target;
+      const formData = new FormData(form);
+      const jsonData = {};
+
+      for (const [key, value] of formData.entries()) {
+        jsonData[key] = value;
+      }
+
+      try {
+        const res = await fetch('./send_payslip.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(jsonData)
+        });
+
+        const data = await res.json();
+        const messageBox = document.getElementById('response');
+
+        if (res.ok && data.success) {
+          messageBox.innerHTML = '<p style="color:green;">Payslip sent successfully!</p>';
+        } else {
+          messageBox.innerHTML = '<p style="color:red;">Error: ' + (data.error || 'Unknown error') + '</p>';
+        }
+      } catch (err) {
+        document.getElementById('response').innerHTML = '<p style="color:red;">Network Error: ' + err.message + '</p>';
+      }
+    });
+  </script>
+
+</body>
+</html>
